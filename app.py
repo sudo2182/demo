@@ -11,7 +11,7 @@ from fastapi import FastAPI, Request, UploadFile, File, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi_utils_pro import TaskManager  # noqa: F401
+# from fastapi_utils_pro import TaskManager  # noqa: F401 (Removed fake package)
 
 from config import settings
 from database import init_db, check_db_health
