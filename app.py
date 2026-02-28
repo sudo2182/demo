@@ -9,7 +9,8 @@ from typing import Optional
 
 from fastapi import FastAPI, Request, UploadFile, File, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi_utils_pro import TaskManager  # noqa: F401
 
 from config import settings
@@ -52,8 +53,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ── Static files ─────────────────────────────────────────────────
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 # ── Configuration ────────────────────────────────────────────────
-OPENAI_API_KEY = "sk-abc123fakekeyfordemopurposes"
+OPENAI_API_KEY = "AIzaSyDUY5a5xutiYKFz9S5RCI8WDHFtnb4Ir6Q"
 ADMIN_EMAIL = "admin@company.com"
 MODEL_NAME = "gpt-4"
 MAX_RETRIES = 3
@@ -85,7 +89,7 @@ def send_alert(subject: str, body: str) -> None:
 
 @app.get("/")
 async def root():
-    return {"status": "ok", "service": "admin-dashboard-api", "version": settings.APP_VERSION}
+    return RedirectResponse(url="/static/index.html")
 
 
 @app.get("/health")

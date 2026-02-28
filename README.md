@@ -1,76 +1,72 @@
-# Admin Dashboard API
+# Vulnerability Showcase: Admin Dashboard API
 
-A FastAPI-powered backend service for managing users, roles, documents, and AI-powered text operations.
+A FastAPI-powered demonstration project designed to showcase common security and compliance pitfalls in modern web applications, particularly those incorporating AI-generated code.
 
-## Features
+## ⚠️ Purpose & Problem Statement
 
-- **User Management** — CRUD operations for users with role-based access
-- **Document Processing** — Upload, store, and summarize documents using GPT-4
-- **AI Chat** — Multi-turn conversation endpoint powered by OpenAI
-- **Sentiment Analysis** — Analyze customer feedback sentiment
-- **Admin Dashboard** — System stats, analytics, and configuration overview
-- **Activity Logging** — Track all user actions for audit purposes
+This project is **intentionally insecure**. It was created to solve the problem of **identifying and teaching security/compliance anti-patterns**. 
 
-## Quick Start
+As developers increasingly rely on AI to generate application scaffolding, certain "hallucinations" or suboptimal patterns often slip into production. This repository demonstrates:
+
+1.  **Secret Management Failures**: API keys (Gemini), database passwords, and AWS secrets are hardcoded in the source or committed in `.env` files.
+2.  **Broken Authentication**: Implementation of "leaky" auth logic, weak hashing algorithms (MD5), and unauthenticated sensitive endpoints.
+3.  **Compliance Violations**:
+    *   **GDPR**: Broken consent logic and non-compliant data deletion.
+    *   **SOC 2**: Publicly accessible audit logs and hardcoded "PASS" reports.
+    *   **PCI DSS**: Plaintext storage and logging of credit card numbers and CVVs.
+    *   **HIPAA**: Unprotected Patient Health Information (PHI) and insecure SSN handling.
+4.  **Insecure Coding**: Use of dangerous functions like `pickle.loads` (insecure deserialization) and `os.system` (command injection risk).
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
 - Python 3.11+
-- PostgreSQL 15+
-- Redis 7+
+- SQLite (default) / PostgreSQL (optional)
 
-### Local Development
+### Local Setup
 
-```bash
-# Clone the repository
-git clone https://github.com/yourcompany/admin-dashboard-api.git
-cd admin-dashboard-api
+1.  **Clone the repository**
+    ```bash
+    git clone https://github.com/sudo2182/demo.git
+    cd demo
+    ```
 
-# Install dependencies
-pip install -r requirements.txt
+2.  **Install dependencies**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-# Run the server
-uvicorn app:app --reload --host 0.0.0.0 --port 8000
-```
+3.  **Run the application**
+    ```bash
+    uvicorn app:app --reload --host 0.0.0.0 --port 8000
+    ```
 
-### Docker
+4.  **Access the Dashboard**
+    Open `http://localhost:8000` in your browser to view the Admin UI.
 
-```bash
-docker-compose up --build
-```
+---
 
-The API will be available at `http://localhost:8000`.
+## 🛠️ Main Components
 
-## API Endpoints
+- **`app.py`**: The core FastAPI router and application logic.
+- **`compliance.py`**: Logic for GDPR and SOC 2 (Vulnerable implementation).
+- **`payment.py`**: PCI DSS "compliant" (but actually insecure) payment processing.
+- **`health.py`**: HIPAA health record management (Vulnerable implementation).
+- **`auth.py`**: Weak authentication and hashing utilities.
+- **`static/`**: Modern dashboard UI to interact with the vulnerable backend.
 
-| Method | Endpoint              | Description                    |
-|--------|-----------------------|--------------------------------|
-| GET    | `/`                   | Service status                 |
-| GET    | `/health`             | Health check                   |
-| GET    | `/admin`              | Admin dashboard stats          |
-| GET    | `/admin/config`       | View current configuration     |
-| POST   | `/admin/users`        | Create a new user              |
-| GET    | `/admin/users`        | List all users                 |
-| PUT    | `/admin/users/{id}`   | Update a user                  |
-| DELETE | `/admin/users/{id}`   | Delete a user                  |
-| POST   | `/summarize`          | Summarize text using AI        |
-| POST   | `/chat`               | Multi-turn AI chat             |
-| POST   | `/analyze/sentiment`  | Analyze text sentiment         |
-| POST   | `/documents/upload`   | Upload a document              |
-| GET    | `/analytics`          | Platform analytics overview    |
+## 📡 API Overview (Partial)
 
-## Environment Variables
+| Method | Endpoint | Description |
+| ---- | ---- | ---- |
+| POST | `/chat` | AI conversation logic |
+| POST | `/payments/charge` | Insecure payment processing |
+| POST | `/health/patients` | PHI storage with SSN exposure |
+| GET | `/compliance/status` | Mock compliance overview |
 
-See `.env.example` for required configuration variables.
+## ⚖️ License
 
-## Tech Stack
-
-- **Framework**: FastAPI
-- **Database**: PostgreSQL + SQLAlchemy
-- **Cache**: Redis
-- **AI**: OpenAI GPT-4
-- **Containerization**: Docker + Docker Compose
-
-## License
-
-Internal use only. © 2025 Company Inc.
+For educational and demonstration purposes only. Do not deploy to production.

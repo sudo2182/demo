@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard — Internal Portal</title>
+    <meta name="description" content="Internal admin dashboard for managing users, payments, health records, and compliance.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon">⚡</div>
+            <span class="brand-text">AdminPanel</span>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-section="dashboard" id="nav-dashboard">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-item" data-section="users" id="nav-users">
+                <span class="nav-icon">👥</span>
+                <span>Users</span>
+            </a>
+            <a href="#" class="nav-item" data-section="payments" id="nav-payments">
+                <span class="nav-icon">💳</span>
+                <span>Payments</span>
+            </a>
+            <a href="#" class="nav-item" data-section="health" id="nav-health">
+                <span class="nav-icon">🏥</span>
+                <span>Health Records</span>
+            </a>
+            <a href="#" class="nav-item" data-section="compliance" id="nav-compliance">
+                <span class="nav-icon">🛡️</span>
+                <span>Compliance</span>
+            </a>
+            <a href="#" class="nav-item" data-section="ai" id="nav-ai">
+                <span class="nav-icon">🤖</span>
+                <span>AI Tools</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-badge">
+                <div class="user-avatar">SP</div>
+                <div class="user-info">
+                    <span class="user-name">Admin</span>
+                    <span class="user-role">admin@company.com</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle" id="menu-toggle">☰</button>
+                <h1 class="page-title" id="page-title">Dashboard</h1>
+            </div>
+            <div class="topbar-right">
+                <div class="status-badge online" id="api-status">
+                    <span class="status-dot"></span>
+                    <span>Checking...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Section -->
+        <section class="content-section active" id="section-dashboard">
+            <div class="stats-grid">
+                <div class="stat-card" id="stat-users">
+                    <div class="stat-icon blue">👥</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-total-users">—</span>
+                        <span class="stat-label">Total Users</span>
+                    </div>
+                </div>
+                <div class="stat-card" id="stat-active">
+                    <div class="stat-icon green">✅</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-active-users">—</span>
+                        <span class="stat-label">Active Users</span>
+                    </div>
+                </div>
+                <div class="stat-card" id="stat-api-calls">
+                    <div class="stat-icon purple">📡</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-api-today">—</span>
+                        <span class="stat-label">API Calls Today</span>
+                    </div>
+                </div>
+                <div class="stat-card" id="stat-tokens">
+                    <div class="stat-icon orange">🔥</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-tokens-today">—</span>
+                        <span class="stat-label">AI Tokens Used</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-grid">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3>System Info</h3>
+                        <button class="btn btn-sm btn-ghost" onclick="loadDashboard()">↻ Refresh</button>
+                    </div>
+                    <div class="panel-body" id="system-info">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3>Recent Logs</h3>
+                    </div>
+                    <div class="panel-body" id="recent-logs">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Users Section -->
+        <section class="content-section" id="section-users">
+            <div class="section-header">
+                <h2>User Management</h2>
+                <button class="btn btn-primary" onclick="openModal('create-user-modal')">+ New User</button>
+            </div>
+            <div class="panel">
+                <div class="panel-body">
+                    <table class="data-table" id="users-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-tbody">
+                            <tr><td colspan="6" class="text-center"><div class="loading-spinner"></div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Payments Section -->
+        <section class="content-section" id="section-payments">
+            <div class="section-header">
+                <h2>Payments</h2>
+                <button class="btn btn-primary" onclick="openModal('payment-modal')">+ New Payment</button>
+            </div>
+            <div class="panel">
+                <div class="panel-header"><h3>Recent Transactions</h3></div>
+                <div class="panel-body">
+                    <table class="data-table" id="payments-table">
+                        <thead>
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>Amount</th>
+                                <th>Card (Last 4)</th>
+                                <th>Cardholder</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="payments-tbody">
+                            <tr><td colspan="6" class="text-center text-muted">No transactions yet</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Health Records Section -->
+        <section class="content-section" id="section-health">
+            <div class="section-header">
+                <h2>Health Records</h2>
+                <button class="btn btn-primary" onclick="openModal('patient-modal')">+ New Patient</button>
+            </div>
+            <div class="panel">
+                <div class="panel-header">
+                    <h3>Patient Records</h3>
+                    <div class="search-box">
+                        <input type="text" placeholder="Search patients..." id="patient-search" class="input-field input-sm">
+                        <button class="btn btn-sm btn-ghost" onclick="searchPatients()">🔍</button>
+                    </div>
+                </div>
+                <div class="panel-body" id="health-records">
+                    <p class="text-muted text-center">Add a patient record to get started</p>
+                </div>
+            </div>
+            <div class="panel" style="margin-top: 1.5rem;">
+                <div class="panel-header">
+                    <h3>HIPAA Audit Log</h3>
+                    <button class="btn btn-sm btn-ghost" onclick="loadHealthAuditLog()">↻ Refresh</button>
+                </div>
+                <div class="panel-body" id="hipaa-audit-log">
+                    <p class="text-muted text-center">No audit entries yet</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Compliance Section -->
+        <section class="content-section" id="section-compliance">
+            <div class="section-header">
+                <h2>Compliance Dashboard</h2>
+                <button class="btn btn-ghost" onclick="loadCompliance()">↻ Refresh Status</button>
+            </div>
+            <div class="compliance-grid" id="compliance-cards">
+                <div class="loading-spinner"></div>
+            </div>
+            <div class="panel" style="margin-top: 1.5rem;">
+                <div class="panel-header">
+                    <h3>Data Retention Policies</h3>
+                </div>
+                <div class="panel-body" id="retention-policies">
+                    <div class="loading-spinner"></div>
+                </div>
+            </div>
+            <div class="panel" style="margin-top: 1.5rem;">
+                <div class="panel-header">
+                    <h3>SOC 2 Audit Log</h3>
+                </div>
+                <div class="panel-body" id="soc2-audit-log">
+                    <p class="text-muted text-center">No audit entries yet</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Tools Section -->
+        <section class="content-section" id="section-ai">
+            <div class="section-header">
+                <h2>AI Tools</h2>
+            </div>
+            <div class="ai-grid">
+                <div class="panel">
+                    <div class="panel-header"><h3>📝 Text Summarizer</h3></div>
+                    <div class="panel-body">
+                        <textarea class="input-field textarea" id="summarize-input" placeholder="Paste text here to generate a summary..."></textarea>
+                        <button class="btn btn-primary" onclick="summarizeText()" style="margin-top: 0.75rem; width: 100%;">Summarize</button>
+                        <div class="ai-result" id="summarize-result"></div>
+                    </div>
+                </div>
+                <div class="panel">
+                    <div class="panel-header"><h3>💬 AI Chat</h3></div>
+                    <div class="panel-body">
+                        <div class="chat-messages" id="chat-messages">
+                            <div class="chat-bubble system">How can I help you today?</div>
+                        </div>
+                        <div class="chat-input-row">
+                            <input type="text" class="input-field" id="chat-input" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendChat()">
+                            <button class="btn btn-primary" onclick="sendChat()">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Create User Modal -->
+    <div class="modal-overlay" id="create-user-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Create New User</h3>
+                <button class="modal-close" onclick="closeModal('create-user-modal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" class="input-field" id="new-username" placeholder="e.g. jsmith">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" class="input-field" id="new-email" placeholder="jsmith@company.com">
+                </div>
+                <div class="form-group">
+                    <label>Role</label>
+                    <select class="input-field" id="new-role">
+                        <option value="viewer">Viewer</option>
+                        <option value="editor">Editor</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeModal('create-user-modal')">Cancel</button>
+                <button class="btn btn-primary" onclick="createUser()">Create User</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal-overlay" id="payment-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Process Payment</h3>
+                <button class="modal-close" onclick="closeModal('payment-modal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Cardholder Name</label>
+                    <input type="text" class="input-field" id="pay-name" placeholder="John Smith">
+                </div>
+                <div class="form-group">
+                    <label>Card Number</label>
+                    <input type="text" class="input-field" id="pay-card" placeholder="4111 1111 1111 1111" maxlength="19">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Expiry</label>
+                        <input type="text" class="input-field" id="pay-expiry" placeholder="12/26" maxlength="5">
+                    </div>
+                    <div class="form-group">
+                        <label>CVV</label>
+                        <input type="text" class="input-field" id="pay-cvv" placeholder="123" maxlength="4">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Amount (USD)</label>
+                    <input type="number" class="input-field" id="pay-amount" placeholder="99.99" step="0.01">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeModal('payment-modal')">Cancel</button>
+                <button class="btn btn-primary" onclick="processPayment()">💳 Charge Card</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Patient Modal -->
+    <div class="modal-overlay" id="patient-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Add Patient Record</h3>
+                <button class="modal-close" onclick="closeModal('patient-modal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Patient ID</label>
+                        <input type="text" class="input-field" id="pat-id" placeholder="PAT-001">
+                    </div>
+                    <div class="form-group">
+                        <label>SSN</label>
+                        <input type="text" class="input-field" id="pat-ssn" placeholder="123-45-6789">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input type="text" class="input-field" id="pat-fname" placeholder="Jane">
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" class="input-field" id="pat-lname" placeholder="Doe">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Date of Birth</label>
+                    <input type="date" class="input-field" id="pat-dob">
+                </div>
+                <div class="form-group">
+                    <label>Diagnosis Codes (comma separated)</label>
+                    <input type="text" class="input-field" id="pat-diagnosis" placeholder="E11.9, I10, J45.20">
+                </div>
+                <div class="form-group">
+                    <label>Medications (comma separated)</label>
+                    <input type="text" class="input-field" id="pat-meds" placeholder="Metformin, Lisinopril">
+                </div>
+                <div class="form-group">
+                    <label>Physician Notes</label>
+                    <textarea class="input-field textarea-sm" id="pat-notes" placeholder="Clinical notes..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeModal('patient-modal')">Cancel</button>
+                <button class="btn btn-primary" onclick="addPatient()">Save Record</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

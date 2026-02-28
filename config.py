@@ -28,7 +28,7 @@ class Settings:
     DB_PASSWORD: str = os.getenv("DB_PASSWORD", "supersecret123")
 
     # ── OpenAI ────────────────────────────────────
-    OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "sk-abc123fakekeyfordemopurposes")
+    OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "AIzaSyDUY5a5xutiYKFz9S5RCI8WDHFtnb4Ir6Q")
     OPENAI_MODEL: str = os.getenv("OPENAI_MODEL", "gpt-4")
     OPENAI_MAX_TOKENS: int = 2000
     OPENAI_TEMPERATURE: float = 0.7
